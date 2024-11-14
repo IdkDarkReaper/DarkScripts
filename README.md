@@ -46,7 +46,7 @@ end
 
 createToggleButton()
 
--- Aim Track مع الدائرة وتجاوز اللاعبين الذين لا يمكن تدميرهم
+-- Aim Track مع الدائرة وتجنب الحلفاء بناءً على اللون الأزرق
 local function enableAimTrack()
 local player = game.Players.LocalPlayer
 local camera = game.Workspace.CurrentCamera
@@ -60,24 +60,21 @@ return hit and hit:IsDescendantOf(target.Parent)
 end
 
 local function isEnemy(character)
--- التحقق من أن اللاعب يمكن تدميره أو إيذاؤه
-local humanoid = player.Character:FindFirstChild("Humanoid")
-if humanoid and humanoid.Health > 0 then
+-- التحقق ما إذا كان اللاعب نفسه أو حليف بناءً على اللون الأزرق
+local teamColor = character:FindFirstChild("Team") and character.Team.Value or nil
 
-local damage = humanoid:TakeDamage(1)
-if damage > 0 then
-humanoid.Health = humanoid.Health + 1 -- استعادة الصحة المفقودة
-return true
-end
-end
-return false
+local shirtColor = character:FindFirstChild("ShirtColor") and character.ShirtColor.Value or nil
+
+local blue = Color3.fromRGB(0, 0, 255) -- افتراض أن الأزرق هو رمز الحلفاء
+
+return (teamColor and teamColor ~= blue) or (shirtColor and shirtColor ~= blue)
 end
 
 local function getClosestTarget()
 local closestTarget = nil
 local shortestDistance = math.huge
 
-for i, v in pairs(game.Players:GetPlayers()) do
+for _, v in pairs(game.Players:GetPlayers()) do
 if v ~= player and v.Character and v.Character:FindFirstChild("Head") and isEnemy(v.Character) then
 local screenPoint = camera:WorldToViewportPoint(v.Character.Head.Position)
 local distance = (Vector2.new(screenPoint.X, screenPoint.Y) - circle.Position).magnitude
