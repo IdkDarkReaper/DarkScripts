@@ -5,11 +5,12 @@ Duration = 5;
 })
 
 local aimTrackEnabled = true
+local circle
 
 -- إنشاء الدائرة في منتصف الشاشة
 local function createCircle()
 local camera = game.Workspace.CurrentCamera
-local circle = Drawing.new("Circle")
+circle = Drawing.new("Circle")
 circle.Position = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)
 circle.Radius = 100
 circle.Color = Color3.fromRGB(255, 0, 0) -- اللون الأحمر
@@ -19,7 +20,7 @@ circle.Visible = true
 return circle
 end
 
-local circle = createCircle()
+createCircle()
 
 -- إنشاء الزر على يسار الشاشة
 local function createToggleButton()
@@ -45,7 +46,7 @@ end
 
 createToggleButton()
 
--- Aim Track مع الدائرة والتفعيل فقط على الأعداء
+-- Aim Track مع الدائرة وتجاوز اللاعبين الذين لا يمكن تدميرهم
 local function enableAimTrack()
 local player = game.Players.LocalPlayer
 local camera = game.Workspace.CurrentCamera
@@ -59,7 +60,17 @@ return hit and hit:IsDescendantOf(target.Parent)
 end
 
 local function isEnemy(character)
-return character:FindFirstChild("TeamColor") and character.TeamColor.Value == "Red"
+-- التحقق من أن اللاعب يمكن تدميره أو إيذاؤه
+local humanoid = player.Character:FindFirstChild("Humanoid")
+if humanoid and humanoid.Health > 0 then
+
+local damage = humanoid:TakeDamage(1)
+if damage > 0 then
+humanoid.Health = humanoid.Health + 1 -- استعادة الصحة المفقودة
+return true
+end
+end
+return false
 end
 
 local function getClosestTarget()
@@ -91,3 +102,10 @@ end)
 end
 
 enableAimTrack()
+
+-- إعادة إنشاء الدائرة والزر بعد عودة الشخصية
+game.Players.LocalPlayer.CharacterAdded:Connect(function()
+if not circle then
+createCircle()
+end
+end)
