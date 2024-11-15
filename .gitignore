@@ -1,41 +1,280 @@
-# Compiled Lua sources
-luac.out
+Name = HDAdminLocalFirst
+Class = LocalScript
+Path = ReplicatedStorage.HDAdminClient.StarterKit.HDAdminLocalFirst
 
-# luarocks build files
-*.src.rock
-*.zip
-*.tar.gz
+RETURN			0		return 
 
-# Object files
-*.o
-*.os
-*.ko
-*.obj
-*.elf
+Name = HDAdminStarterCharacter
+Class = LocalScript
+Path = ReplicatedStorage.HDAdminClient.StarterKit.HDAdminStarterCharacter
 
-# Precompiled Headers
-*.gch
-*.pch
+GETIMPORT		0		var0 = require -- [REDUNDANT]
+GETIMPORT		2		var1 = game -- [REDUNDANT]
+LOADK			4		var3 = "ReplicatedStorage"
+NAMECALL		5		var1 = var1:GetService(var3)
+LOADK			7		var3 = "HDAdminSetup" -- [REDUNDANT]
+NAMECALL		8		var1 = var1:WaitForChild(var3)
+CALL			10		var0 = var0(var1) -- [REDUNDANT]
+NAMECALL		11		var0 = var0:GetMain()
+GETTABLEKS		13		var2 = var0["player"] -- [REDUNDANT]
+GETTABLEKS		15		var1 = var2["Character"]
+JUMPIF			17		if not var1 then
+GETTABLEKS		0			var2 = var0["player"] -- [REDUNDANT]
+GETTABLEKS		2			var1 = var2["CharacterAdded"] -- [REDUNDANT]
+NAMECALL		4			var1 = var1:Wait()
+NAMECALL		5		end
+LOADK			18		var4 = "Humanoid"
+NAMECALL		19		var2 = var1:WaitForChild(var4)
+GETTABLEKS		21		var3 = var2["RigType"] -- [REDUNDANT]
+SETTABLEKS		23		var0["humanoidRigType"] = var3
+GETIMPORT		25		var3 = wait -- [REDUNDANT]
+LOADN			27		var4 = 1 -- [REDUNDANT]
+CALL			28		var3 = var3(var4)
+GETIMPORT		29		var3 = pairs -- [REDUNDANT]
+GETTABLEKS		31		var4 = var0["commandSpeeds"] -- [REDUNDANT]
+CALL			33		var3, var4, var5 = var3(var4)
+FORGPREP_NEXT	34		for var6, var7 in var3, var4, var5 do
+GETTABLEKS		0			var9 = var0["commandsActive"]
+GETTABLE		2			var8 = var9[var6] -- [REDUNDANT]
+JUMPIFNOT		3			if var8 then
+GETTABLEKS		0				var8 = var0["commandsActive"]
+LOADNIL			2				var9 = nil -- [REDUNDANT]
+SETTABLE		3				var8[var6] = var9
+LOADK			4				var10 = "cf" -- [REDUNDANT]
+NAMECALL		5				var8 = var0:GetModule(var10)
+MOVE			7				var10 = var6 -- [REDUNDANT]
+NAMECALL		8				var8 = var8:ActivateClientCommand(var10)
+NAMECALL		9			end
+NAMECALL		9		end
+RETURN			36		return 
 
-# Libraries
-*.lib
-*.a
-*.la
-*.lo
-*.def
-*.exp
 
-# Shared objects (inc. Windows DLLs)
-*.dll
-*.so
-*.so.*
-*.dylib
+Name = HDAdminStarterPlayer
+Class = LocalScript
+Path = ReplicatedStorage.HDAdminClient.StarterKit.HDAdminStarterPlayer
 
-# Executables
-*.exe
-*.out
-*.app
-*.i*86
-*.x86_64
-*.hex
+GETIMPORT		0		var0 = require -- [REDUNDANT]
+GETIMPORT		2		var1 = game -- [REDUNDANT]
+LOADK			4		var3 = "ReplicatedStorage"
+NAMECALL		5		var1 = var1:GetService(var3)
+LOADK			7		var3 = "HDAdminSetup"
+NAMECALL		8		var1 = var1:WaitForChild(var3)
+CALL			10		var0 = var0(var1) -- [REDUNDANT]
+LOADB			11		var2 = true -- [REDUNDANT]
+NAMECALL		12		var0 = var0:GetMain(var2)
+LOADK			14		var3 = "Client"
+NAMECALL		15		var1 = var0:Initialize(var3)
+LOADK			17		var3 = "PageAbout"
+NAMECALL		18		var1 = var0:GetModule(var3)
+NAMECALL		20		var1 = var1:UpdateRankName()
+LOADK			22		var3 = "PageAbout"
+NAMECALL		23		var1 = var0:GetModule(var3)
+NAMECALL		25		var1 = var1:UpdateProfileIcon()
+LOADK			27		var3 = "PageAbout"
+NAMECALL		28		var1 = var0:GetModule(var3)
+NAMECALL		30		var1 = var1:CreateUpdates()
+LOADK			32		var3 = "PageAbout"
+NAMECALL		33		var1 = var0:GetModule(var3)
+NAMECALL		35		var1 = var1:UpdateContributors()
+LOADK			37		var3 = "PageAbout"
+NAMECALL		38		var1 = var0:GetModule(var3)
+NAMECALL		40		var1 = var1:CreateCredits()
+LOADK			42		var3 = "PageCommands"
+NAMECALL		43		var1 = var0:GetModule(var3)
+NAMECALL		45		var1 = var1:CreateCommands()
+LOADK			47		var3 = "PageCommands"
+NAMECALL		48		var1 = var0:GetModule(var3)
+NAMECALL		50		var1 = var1:CreateMorphs()
+LOADK			52		var3 = "PageCommands"
+NAMECALL		53		var1 = var0:GetModule(var3)
+NAMECALL		55		var1 = var1:CreateDetails()
+LOADK			57		var3 = "PageSpecial"
+NAMECALL		58		var1 = var0:GetModule(var3)
+NAMECALL		60		var1 = var1:SetupDonorCommands()
+LOADK			62		var3 = "PageAdmin"
+NAMECALL		63		var1 = var0:GetModule(var3)
+NAMECALL		65		var1 = var1:SetupRanks()
+LOADK			67		var3 = "GUIs" -- [REDUNDANT]
+NAMECALL		68		var1 = var0:GetModule(var3)
+NAMECALL		70		var1 = var1:DisplayPagesAccordingToRank()
+NEWTABLE		72		var1 = {
+							[1] = var0["gui"];
+						} -- [REDUNDANT]
+GETTABLEKS		77		var2 = var0["contentProvider"] -- [REDUNDANT]
+MOVE			79		var4 = var1 -- [REDUNDANT]
+NAMECALL		80		var2 = var2:PreloadAsync(var4)
+RETURN			82		return 
 
+Name = HDAdminSetup
+Class = ModuleScript
+Path = ReplicatedStorage.HDAdminSetup
+
+NEWTABLE		0		var0 = {}
+DUPCLOSURE		2		function var0.GetClientFolder(arg0)
+GETIMPORT		0			var1 = game -- [REDUNDANT]
+LOADK			2			var3 = "ReplicatedStorage"
+NAMECALL		3			var1 = var1:GetService(var3)
+LOADK			5			var3 = "HDAdminClient" -- [REDUNDANT]
+NAMECALL		6			var1 = var1:WaitForChild(var3)
+RETURN			8			return var1
+RETURN			8		end
+DUPCLOSURE		4		upvalue[1_var0] = var0
+DUPCLOSURE		5		function var0.GetMain(arg0, arg1)
+GETIMPORT		0			var2 = require -- [REDUNDANT]
+GETUPVAL		2			var4 = upvalue[upvalue[1_var0]] -- [REDUNDANT]
+NAMECALL		3			var4 = var4:GetClientFolder()
+LOADK			5			var6 = "SharedModules" -- [REDUNDANT]
+NAMECALL		6			var4 = var4:WaitForChild(var6)
+GETTABLEKS		8			var3 = var4["MainFramework"] -- [REDUNDANT]
+CALL			10			var2 = var2(var3)
+JUMPXEQKB		11			if arg1 == true then
+NAMECALL		0				var3 = var2:CheckInitialized()
+MOVE			2				var2 = var3
+MOVE			2			end
+RETURN			13			return var2
+RETURN			13		end
+RETURN			7		return var0
+
+Name = HDAdminStarterCharacter
+Class = LocalScript
+Path = StarterPlayer.StarterCharacterScripts.HDAdminStarterCharacter
+
+GETIMPORT		0		var0 = require -- [REDUNDANT]
+GETIMPORT		2		var1 = game -- [REDUNDANT]
+LOADK			4		var3 = "ReplicatedStorage"
+NAMECALL		5		var1 = var1:GetService(var3)
+LOADK			7		var3 = "HDAdminSetup" -- [REDUNDANT]
+NAMECALL		8		var1 = var1:WaitForChild(var3)
+CALL			10		var0 = var0(var1) -- [REDUNDANT]
+NAMECALL		11		var0 = var0:GetMain()
+GETTABLEKS		13		var2 = var0["player"] -- [REDUNDANT]
+GETTABLEKS		15		var1 = var2["Character"]
+JUMPIF			17		if not var1 then
+GETTABLEKS		0			var2 = var0["player"] -- [REDUNDANT]
+GETTABLEKS		2			var1 = var2["CharacterAdded"] -- [REDUNDANT]
+NAMECALL		4			var1 = var1:Wait()
+NAMECALL		5		end
+LOADK			18		var4 = "Humanoid"
+NAMECALL		19		var2 = var1:WaitForChild(var4)
+GETTABLEKS		21		var3 = var2["RigType"] -- [REDUNDANT]
+SETTABLEKS		23		var0["humanoidRigType"] = var3
+GETIMPORT		25		var3 = wait -- [REDUNDANT]
+LOADN			27		var4 = 1 -- [REDUNDANT]
+CALL			28		var3 = var3(var4)
+GETIMPORT		29		var3 = pairs -- [REDUNDANT]
+GETTABLEKS		31		var4 = var0["commandSpeeds"] -- [REDUNDANT]
+CALL			33		var3, var4, var5 = var3(var4)
+FORGPREP_NEXT	34		for var6, var7 in var3, var4, var5 do
+GETTABLEKS		0			var9 = var0["commandsActive"]
+GETTABLE		2			var8 = var9[var6] -- [REDUNDANT]
+JUMPIFNOT		3			if var8 then
+GETTABLEKS		0				var8 = var0["commandsActive"]
+LOADNIL			2				var9 = nil -- [REDUNDANT]
+SETTABLE		3				var8[var6] = var9
+LOADK			4				var10 = "cf" -- [REDUNDANT]
+NAMECALL		5				var8 = var0:GetModule(var10)
+MOVE			7				var10 = var6 -- [REDUNDANT]
+NAMECALL		8				var8 = var8:ActivateClientCommand(var10)
+NAMECALL		9			end
+NAMECALL		9		end
+RETURN			36		return 
+
+Name = HDAdminStarterPlayer
+Class = LocalScript
+Path = StarterPlayer.StarterPlayerScripts.HDAdminStarterPlayer
+
+GETIMPORT		0		var0 = require -- [REDUNDANT]
+GETIMPORT		2		var1 = game -- [REDUNDANT]
+LOADK			4		var3 = "ReplicatedStorage"
+NAMECALL		5		var1 = var1:GetService(var3)
+LOADK			7		var3 = "HDAdminSetup"
+NAMECALL		8		var1 = var1:WaitForChild(var3)
+CALL			10		var0 = var0(var1) -- [REDUNDANT]
+LOADB			11		var2 = true -- [REDUNDANT]
+NAMECALL		12		var0 = var0:GetMain(var2)
+LOADK			14		var3 = "Client"
+NAMECALL		15		var1 = var0:Initialize(var3)
+LOADK			17		var3 = "PageAbout"
+NAMECALL		18		var1 = var0:GetModule(var3)
+NAMECALL		20		var1 = var1:UpdateRankName()
+LOADK			22		var3 = "PageAbout"
+NAMECALL		23		var1 = var0:GetModule(var3)
+NAMECALL		25		var1 = var1:UpdateProfileIcon()
+LOADK			27		var3 = "PageAbout"
+NAMECALL		28		var1 = var0:GetModule(var3)
+NAMECALL		30		var1 = var1:CreateUpdates()
+LOADK			32		var3 = "PageAbout"
+NAMECALL		33		var1 = var0:GetModule(var3)
+NAMECALL		35		var1 = var1:UpdateContributors()
+LOADK			37		var3 = "PageAbout"
+NAMECALL		38		var1 = var0:GetModule(var3)
+NAMECALL		40		var1 = var1:CreateCredits()
+LOADK			42		var3 = "PageCommands"
+NAMECALL		43		var1 = var0:GetModule(var3)
+NAMECALL		45		var1 = var1:CreateCommands()
+LOADK			47		var3 = "PageCommands"
+NAMECALL		48		var1 = var0:GetModule(var3)
+NAMECALL		50		var1 = var1:CreateMorphs()
+LOADK			52		var3 = "PageCommands"
+NAMECALL		53		var1 = var0:GetModule(var3)
+NAMECALL		55		var1 = var1:CreateDetails()
+LOADK			57		var3 = "PageSpecial"
+NAMECALL		58		var1 = var0:GetModule(var3)
+NAMECALL		60		var1 = var1:SetupDonorCommands()
+LOADK			62		var3 = "PageAdmin"
+NAMECALL		63		var1 = var0:GetModule(var3)
+NAMECALL		65		var1 = var1:SetupRanks()
+LOADK			67		var3 = "GUIs" -- [REDUNDANT]
+NAMECALL		68		var1 = var0:GetModule(var3)
+NAMECALL		70		var1 = var1:DisplayPagesAccordingToRank()
+NEWTABLE		72		var1 = {
+							[1] = var0["gui"];
+						} -- [REDUNDANT]
+GETTABLEKS		77		var2 = var0["contentProvider"] -- [REDUNDANT]
+MOVE			79		var4 = var1 -- [REDUNDANT]
+NAMECALL		80		var2 = var2:PreloadAsync(var4)
+RETURN			82		return 
+
+Name = HDAdminStarterCharacter
+Class = LocalScript
+Path = Workspace.hac10king.HDAdminStarterCharacter
+
+GETIMPORT		0		var0 = require -- [REDUNDANT]
+GETIMPORT		2		var1 = game -- [REDUNDANT]
+LOADK			4		var3 = "ReplicatedStorage"
+NAMECALL		5		var1 = var1:GetService(var3)
+LOADK			7		var3 = "HDAdminSetup" -- [REDUNDANT]
+NAMECALL		8		var1 = var1:WaitForChild(var3)
+CALL			10		var0 = var0(var1) -- [REDUNDANT]
+NAMECALL		11		var0 = var0:GetMain()
+GETTABLEKS		13		var2 = var0["player"] -- [REDUNDANT]
+GETTABLEKS		15		var1 = var2["Character"]
+JUMPIF			17		if not var1 then
+GETTABLEKS		0			var2 = var0["player"] -- [REDUNDANT]
+GETTABLEKS		2			var1 = var2["CharacterAdded"] -- [REDUNDANT]
+NAMECALL		4			var1 = var1:Wait()
+NAMECALL		5		end
+LOADK			18		var4 = "Humanoid"
+NAMECALL		19		var2 = var1:WaitForChild(var4)
+GETTABLEKS		21		var3 = var2["RigType"] -- [REDUNDANT]
+SETTABLEKS		23		var0["humanoidRigType"] = var3
+GETIMPORT		25		var3 = wait -- [REDUNDANT]
+LOADN			27		var4 = 1 -- [REDUNDANT]
+CALL			28		var3 = var3(var4)
+GETIMPORT		29		var3 = pairs -- [REDUNDANT]
+GETTABLEKS		31		var4 = var0["commandSpeeds"] -- [REDUNDANT]
+CALL			33		var3, var4, var5 = var3(var4)
+FORGPREP_NEXT	34		for var6, var7 in var3, var4, var5 do
+GETTABLEKS		0			var9 = var0["commandsActive"]
+GETTABLE		2			var8 = var9[var6] -- [REDUNDANT]
+JUMPIFNOT		3			if var8 then
+GETTABLEKS		0				var8 = var0["commandsActive"]
+LOADNIL			2				var9 = nil -- [REDUNDANT]
+SETTABLE		3				var8[var6] = var9
+LOADK			4				var10 = "cf" -- [REDUNDANT]
+NAMECALL		5				var8 = var0:GetModule(var10)
+MOVE			7				var10 = var6 -- [REDUNDANT]
+NAMECALL		8				var8 = var8:ActivateClientCommand(var10)
+NAMECALL		9			end
+NAMECALL		9		end
+RETURN			36		return 
