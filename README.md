@@ -1,120 +1,105 @@
-game.StarterGui:SetCore("SendNotification", {
-Title = "Script Activated";
-Text = "Aim Track enabled!";
-Duration = 5;
-})
+local productId = "1932214113"
+local running = false
+local infiniteRunning = false
 
-local aimTrackEnabled = true
-local circle
-local ToggleButton
-local playerTeam
+-- إنشاء واجهة المستخدم
+local ScreenGui = Instance.new("ScreenGui", game.Players.LocalPlayer:WaitForChild("PlayerGui"))
 
--- الحصول على فريق اللاعب من الرسالة
-local function retrievePlayerTeam()
-local chatService = game:GetService("Chat")
-chatService.Chatted:Connect(function(msg)
-if msg:match("team 1") then
-playerTeam = 1
-elseif msg:match("team 2") then
-playerTeam = 2
+local Frame = Instance.new("Frame", ScreenGui)
+Frame.Position = UDim2.new(0.8, 0, 0.2, 0)
+Frame.Size = UDim2.new(0.18, 0, 0.25, 0)
+Frame.BackgroundColor3 = Color3.new(0.2, 0.2, 0.2)
+Frame.BorderSizePixel = 0
+Frame.Active = true
+Frame.Draggable = true
+
+local Title = Instance.new("TextLabel", Frame)
+Title.Text = "Kick Script"
+Title.Size = UDim2.new(1, 0, 0.2, 0)
+Title.TextColor3 = Color3.new(1, 1, 1)
+Title.BackgroundTransparency = 1
+
+local Button = Instance.new("TextButton", Frame)
+Button.Text = "Off"
+Button.Size = UDim2.new(0.8, 0, 0.2, 0)
+Button.Position = UDim2.new(0.1, 0, 0.25, 0)
+Button.TextColor3 = Color3.new(1, 0, 0)
+Button.BackgroundColor3 = Color3.new(1, 1, 1)
+
+local InfiniteButton = Instance.new("TextButton", Frame)
+InfiniteButton.Text = "Infinite"
+InfiniteButton.Size = UDim2.new(0.8, 0, 0.2, 0)
+InfiniteButton.Position = UDim2.new(0.1, 0, 0.5, 0)
+InfiniteButton.TextColor3 = Color3.new(0, 0, 0)
+InfiniteButton.BackgroundColor3 = Color3.new(1, 1, 1)
+
+local ChangeServerButton = Instance.new("TextButton", Frame)
+ChangeServerButton.Text = "Change Server"
+ChangeServerButton.Size = UDim2.new(0.8, 0, 0.2, 0)
+ChangeServerButton.Position = UDim2.new(0.1, 0, 0.75, 0)
+ChangeServerButton.TextColor3 = Color3.new(0, 0, 0)
+ChangeServerButton.BackgroundColor3 = Color3.new(0, 0, 0)
+
+-- دالة لتغيير لون الإطار بشكل مستمر
+local function rainbowColors()
+local counter = 0
+while true do
+counter = counter + 0.01
+Frame.BackgroundColor3 = Color3.fromHSV(counter % 1, 1, 1)
+wait(0.1)
 end
+end
+
+-- تنفيذ السكربت بشكل متكرر مع فاصل زمني
+local function runScript()
+while running do
+pcall(function()
+game:GetService("MarketplaceService"):SignalPromptProductPurchaseFinished(game.Players.LocalPlayer.UserId, tonumber(productId), true)
+end)
+wait(1)
+end
+end
+
+
+-- تنفيذ السكربت بشكل متكرر بدون توقف
+local function runScriptInfinite()
+while infiniteRunning do
+pcall(function()
+game:GetService("MarketplaceService"):SignalPromptProductPurchaseFinished(game.Players.LocalPlayer.UserId, tonumber(productId), true)
 end)
 end
-
-retrievePlayerTeam()
-
--- إنشاء الدائرة في منتصف الشاشة
-local function createCircle()
-local camera = game.Workspace.CurrentCamera
-circle = Drawing.new("Circle")
-circle.Position = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)
-circle.Radius = 100
-circle.Color = Color3.fromRGB(255, 0, 0) -- اللون الأحمر
-circle.Thickness = 2
-circle.Transparency = 0.5
-circle.Visible = true
-return circle
 end
 
-createCircle()
+-- نقل اللاعب إلى سيرفر آخر
+local function changeServer()
+local TeleportService = game:GetService("TeleportService")
+local PlaceId = game.PlaceId
+TeleportService:Teleport(PlaceId, game.Players.LocalPlayer)
+end
 
--- إنشاء الزر على يسار الشاشة
-local function createToggleButton()
-local screenGui = Instance.new("ScreenGui", game.Players.LocalPlayer:WaitForChild("PlayerGui"))
-ToggleButton = Instance.new("TextButton", screenGui)
-ToggleButton.Size = UDim2.new(0, 100, 0, 50)
-ToggleButton.Position = UDim2.new(0, 10, 0.5, -25)
-ToggleButton.BackgroundColor3 = Color3.new(0, 0, 0)
-ToggleButton.TextColor3 = Color3.new(1, 1, 1)
-ToggleButton.Text = "إغلاق"
-
-ToggleButton.MouseButton1Click:Connect(function()
-aimTrackEnabled = not aimTrackEnabled
-if aimTrackEnabled then
-circle.Visible = true
-ToggleButton.Text = "إغلاق"
+-- التحكم في تشغيل وإيقاف السكربت
+Button.MouseButton1Click:Connect(function()
+running = not running
+if running then
+Button.Text = "On"
+Button.TextColor3 = Color3.new(0, 1, 0)
+spawn(runScript)
 else
-circle.Visible = false
-ToggleButton.Text = "تشغيل"
+Button.Text = "Off"
+Button.TextColor3 = Color3.new(1, 0, 0)
 end
 end)
-end
 
-createToggleButton()
-
--- Aim Track مع الدائرة يستهدف الأعداء فقط
-local function enableAimTrack()
-local player = game.Players.LocalPlayer
-local camera = game.Workspace.CurrentCamera
-
-local function isTargetVisible(target)
-local origin = camera.CFrame.Position
-local direction = (target.Position - origin).unit
-local ray = Ray.new(origin, direction * 5000)
-local hit = game.Workspace:FindPartOnRayWithIgnoreList(ray, {player.Character})
-return hit and hit:IsDescendantOf(target.Parent)
-end
-
-local function isEnemy(target)
-local targetTeam = target:FindFirstChild("Team") and target.Team.Value or nil
-return targetTeam and targetTeam ~= playerTeam
-end
-
-local function getClosestTarget()
-local closestTarget = nil
-local shortestDistance = math.huge
-
-for _, v in pairs(game.Players:GetPlayers()) do
-if v ~= player and v.Character and v.Character:FindFirstChild("Head") and isEnemy(v) then
-local screenPoint = camera:WorldToViewportPoint(v.Character.Head.Position)
-local distance = (Vector2.new(screenPoint.X, screenPoint.Y) - circle.Position).magnitude
-if distance < circle.Radius and distance < shortestDistance and isTargetVisible(v.Character.Head) then
-closestTarget = v
-shortestDistance = distance
-end
-end
-end
-
-return closestTarget
-end
-
-game:GetService("RunService").RenderStepped:Connect(function()
-if aimTrackEnabled then
-local target = getClosestTarget()
-if target and target.Character and target.Character:FindFirstChild("Head") then
-camera.CFrame = CFrame.new(camera.CFrame.Position, target.Character.Head.Position)
-end
-end
-end)
-end
-
-enableAimTrack()
-
--- إعادة إنشاء الدائرة والزر بعد عودة الشخصية
-game.Players.LocalPlayer.CharacterAdded:Connect(function()
-createCircle()
-createToggleButton()
-enableAimTrack()
-retrievePlayerTeam()
+-- التحكم في تشغيل السكربت بشكل لا نهائي وطرد اللاعب أولاً
+InfiniteButton.MouseButton1Click:Connect(function()
+infiniteRunning = true
+game.Players.LocalPlayer:Kick("Done, Sir")
+wait(5)
+spawn(runScriptInfinite)
 end)
 
+-- زر تغيير السيرفر
+ChangeServerButton.MouseButton1Click:Connect(changeServer)
+
+-- بدء تغيير الألوان
+spawn(rainbowColors)
