@@ -33,13 +33,6 @@ InfiniteButton.Position = UDim2.new(0.1, 0, 0.5, 0)
 InfiniteButton.TextColor3 = Color3.new(0, 0, 0)
 InfiniteButton.BackgroundColor3 = Color3.new(1, 1, 1)
 
-local TxtButton = Instance.new("TextButton", Frame)
-TxtButton.Text = "Txt"
-TxtButton.Size = UDim2.new(0.8, 0, 0.2, 0)
-TxtButton.Position = UDim2.new(0.1, 0, 0.5, 0)  
-TxtButton.TextColor3 = Color3.new(1, 1, 1)
-TxtButton.BackgroundColor3 = Color3.new(1, 0, 0)
-
 local ChangeServerButton = Instance.new("TextButton", Frame)
 ChangeServerButton.Text = "Change Server"
 ChangeServerButton.Size = UDim2.new(0.8, 0, 0.2, 0)
@@ -96,18 +89,6 @@ Button.Text = "Off"
 Button.TextColor3 = Color3.new(1, 0, 0)
 end
 end)
-
-
-local function sendSpamMessage()
-TxtButton.BackgroundColor3 = Color3.new(0, 1, 0)
-for i = 1, 5 do
-game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer("Goooo To Hell Everyone", "All")
-wait(0.1)
-end
-TxtButton.BackgroundColor3 = Color3.new(1, 0, 0)
-end
-
-TxtButton.MouseButton1Click:Connect(sendSpamMessage)
 
 
 -- التحكم في تشغيل السكربت بشكل لا نهائي وطرد اللاعب أولاً
