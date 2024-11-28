@@ -111,7 +111,7 @@ end
 
 ToggleButton.MouseButton1Click:Connect(function()
 
-```[]
+
     if isDuplicating then
         stopDupe()
     else
