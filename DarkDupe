@@ -5,19 +5,16 @@ local StarterGui = game:GetService("StarterGui")
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 
-
 if game.PlaceId ~= 16732694052 then
-return -- Exit the script if not in the desired place
+return
 end
-
 
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "DarkDupeGUI | لائحة تكرار دارك"
 ScreenGui.Parent = game.CoreGui
-ScreenGui.ResetOnSpawn = false  -- Keep GUI after respawn
+ScreenGui.ResetOnSpawn = false
 
 local function createGui()
--- Create frame and buttons
 local Frame = Instance.new("Frame")
 Frame.BackgroundColor3 = Color3.new(1, 1, 1)
 Frame.BorderSizePixel = 0
@@ -67,10 +64,10 @@ MinimizedHolder.Parent = ScreenGui
 local MinimizedButton = Instance.new("TextButton")
 MinimizedButton.BackgroundColor3 = Color3.new(1, 1, 1)
 MinimizedButton.Size = UDim2.new(1, 0, 1, 0)
-MinimizedButton.Text = "DK"  -- Add text "DK"
+MinimizedButton.Text = "DK"
 MinimizedButton.Parent = MinimizedHolder
 
--- Rainbow effect
+
 local function updateRainbowColor()
 local hue = tick() % 5 / 5
 Frame.BackgroundColor3 = Color3.fromHSV(hue, 1, 1)
@@ -80,7 +77,6 @@ end
 
 RunService.RenderStepped:Connect(updateRainbowColor)
 
--- Button functions
 local isAppraising = false
 local appraiseConnection
 
@@ -137,7 +133,6 @@ MinimizedHolder.Visible = false
 end)
 
 
--- Show notification
 local function showNotification()
 StarterGui:SetCore("SendNotification", {
 Title = "تم التفعيل ✅| بواسطة دارك ريبر ✅",
@@ -147,14 +142,12 @@ Duration = 5
 })
 end
 
--- Call notification after creating the GUI
 showNotification()
 end
 
 createGui()
 
--- Listen to character spawn to ensure GUI stays active
 LocalPlayer.CharacterAdded:Connect(function(char)
-wait(1) -- Wait for character to load
+wait(1)
 createGui()
 end)
