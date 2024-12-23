@@ -2554,3 +2554,110 @@ local function loadReanim()
 
 	local accessories = hum:GetAccessories()
 	local rigAccessories = rigHum:GetAccessories()
+		end
+
+		if counter + charCount <= strlen then
+			displayString = sample:sub(counter, counter + charCount)
+		else
+			displayString = sample:sub(counter, strlen)..sample:sub(1, counter + charCount - strlen)
+		end
+	end
+
+	box.PlaceholderText = (("%s"):format(displayString))
+end))
+
+--[[Sort commands alphabetically]]--
+table.sort(commands, function(a,b)
+	return a.name < b.name
+end)
+
+--[[Add command list logic]]--
+for i,v in pairs(commands) do
+	local level = v.securityLevel
+	local clone = cmdTemplate:Clone()
+	clone.Text = v.name .. ` ({rankNames[level]})`
+	clone.Name = v.name
+	clone.Visible = true
+	clone.Parent = cmdsList
+end
+
+table.insert(genv.connections, closeButton.MouseButton1Click:Connect(function()
+	cmdsFrame.Visible = false
+end))
+
+--[[Add drag functionality]]--
+local dragging
+local dragInput
+local dragStart
+local startPos
+
+local lastMousePos
+local lastGoalPos
+local dragSpeed = 20
+
+local function update(dt)
+	if not (startPos) then return end
+	if not (dragging) and (lastGoalPos) then
+		cmdsFrame.Position = UDim2.new(startPos.X.Scale, lerp(cmdsFrame.Position.X.Offset, lastGoalPos.X.Offset, dt * dragSpeed), startPos.Y.Scale, lerp(cmdsFrame.Position.Y.Offset, lastGoalPos.Y.Offset, dt * dragSpeed))
+		return 
+	end
+
+	local delta = (lastMousePos - uis:GetMouseLocation())
+	local xGoal = (startPos.X.Offset - delta.X)
+	local yGoal = (startPos.Y.Offset - delta.Y)
+	lastGoalPos = UDim2.new(startPos.X.Scale, xGoal, startPos.Y.Scale, yGoal)
+	cmdsFrame.Position = UDim2.new(startPos.X.Scale, lerp(cmdsFrame.Position.X.Offset, xGoal, dt * dragSpeed), startPos.Y.Scale, lerp(cmdsFrame.Position.Y.Offset, yGoal, dt * dragSpeed))	
+end
+
+cmdsFrame.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		dragging = true
+		dragStart = input.Position
+		startPos = cmdsFrame.Position
+		lastMousePos = uis:GetMouseLocation()
+
+		input.Changed:Connect(function()
+			if input.UserInputState == Enum.UserInputState.End then
+				dragging = false
+			end
+		end)
+	end
+end)
+
+cmdsFrame.InputChanged:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+		dragInput = input
+	end
+end)
+
+table.insert(genv.connections,rs.Heartbeat:Connect(update))
+
+--[[send to game logger]]--
+if not inDatabase then
+	local function promptCallback(answer)
+		if answer == "No" then return end
+		local sg = localPlayer:FindFirstChildOfClass("StarterGear")
+		if sg then
+			delete(sg)
+			task.wait(checkTime + mobileOffset)
+		end
+		if (sg and sg.Parent == localPlayer) or (isTesting == false and game:GetService("GuiService"):GetErrorCode() ~= Enum.ConnectionError.OK) then return notify("Logger error", "Game could not be logged.", 10) end
+		sendGame()
+		debugPrint("game sent to server")
+	end
+
+	local bindable = Instance.new("BindableFunction")
+	bindable.OnInvoke = promptCallback
+
+	sgui:SetCore("SendNotification", {
+		Title = "Game logger";
+		Text = "Log this game? (PLEASE TEST COMMANDS BEFORE CLICKING YES)",
+		Duration = 300,
+		Button1 = "Yes",
+		Button2 = "No",
+		Icon = "rbxassetid://71876941165953",
+		Callback = bindable
+	})
+end
+
+debugPrint("QuirkyCMD loaded successfully!")
